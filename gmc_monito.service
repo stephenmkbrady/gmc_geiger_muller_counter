@@ -1,0 +1,16 @@
+[Unit]
+Description=GMC-300E Plus Monitor
+After=network.target mosquitto.service
+Requires=mosquitto.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/opt/gmc-monitor
+ExecStart=/opt/gmc-monitor/venv/bin/python /opt/gmc-monitor/gmc_monitor.py /opt/gmc-monitor/gmc_config.json
+Restart=always
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

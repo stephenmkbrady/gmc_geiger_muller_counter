@@ -1,0 +1,72 @@
+mqtt:
+  broker: localhost
+  discovery: true
+  discovery_prefix: homeassistant
+
+# Optional: Create custom dashboard templates
+sensor:
+  - platform: template
+    sensors:
+      radiation_status:
+        friendly_name: "Radiation Level Status"
+        value_template: >-
+          {% set usvh = states('sensor.radiation_usv_h') | float %}
+          {% if usvh < 0.05 %}
+            Normal
+          {% elif usvh < 0.2 %}
+            Elevated
+          {% elif usvh < 1.0 %}
+            High
+          {% else %}
+            Critical
+          {% endif %}
+        icon_template: >-
+          {% set usvh = states('sensor.radiation_usv_h') | float %}
+          {% if usvh < 0.05 %}
+            mdi:radioactive-off
+          {% elif usvh < 0.2 %}
+            mdi:radioactive
+          {% else %}
+            mdi:alert-rhombus
+          {% endif %}
+
+# Automation examples
+automation:
+  - alias: "GMC Low Battery Alert"
+    trigger:
+      platform: numeric_state
+      entity_id: sensor.gmc_battery_level
+      below: 20
+    action:
+      service: notify.mobile_app_your_phone
+      data:
+        message: "GMC-300E Plus battery low: {{ states('sensor.gmc_battery_voltage') }}V"
+        
+  - alias: "High Radiation Alert"
+    trigger:
+      platform: numeric_state
+      entity_id: sensor.radiation_usv_h
+      above: 0.5
+      for:
+        minutes: 2
+    action:
+      - service: notify.mobile_app_your_phone
+        data:
+          message: "High radiation detected: {{ states('sensor.radiation_usv_h') }} µSv/h"
+      - service: light.turn_on
+        entity_id: light.alert_lights
+        data:
+          color_name: red
+          brightness: 255
+
+  - alias: "GMC Device Offline Alert"
+    trigger:
+      platform: state
+      entity_id: sensor.gmc_connection_status
+      to: "Disconnected"
+      for:
+        minutes: 5
+    action:
+      service: notify.mobile_app_your_phone
+      data:
+        message: "GMC-300E Plus device has gone offline"

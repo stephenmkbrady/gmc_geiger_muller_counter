@@ -1,0 +1,54 @@
+{
+  "device": {
+    "port": "/dev/ttyUSB0",
+    "timeout": 3,
+    "sync_datetime_on_start": true,
+    "check_time_drift": true,
+    "max_time_drift_seconds": 300,
+    "cpm_to_usvh_factor": 0.0057
+  },
+  "mqtt": {
+    "broker": "localhost",
+    "port": 1883,
+    "username": null,
+    "password": null,
+    "topic_prefix": "homeassistant/sensor/gmc300e",
+    "discovery_prefix": "homeassistant",
+    "use_ssl": false,
+    "ca_cert": null,
+    "cert_file": null,
+    "key_file": null,
+    "insecure": false,
+    "availability_topic": "homeassistant/sensor/gmc300e/availability"
+  },
+  "monitoring": {
+    "update_interval_seconds": 60,
+    "low_battery_threshold_volts": 6.0,
+    "critical_battery_threshold_volts": 5.5,
+    "battery_full_voltage": 8.4,
+    "battery_empty_voltage": 6.0
+  },
+  "logging": {
+    "level": "INFO",
+    "file": null
+  },
+  "data_logging": {
+    "enabled": true,
+    "csv_file": "gmc_data.csv",
+    "max_file_size_mb": 100,
+    "enable_export": true
+  },
+  "alerts": {
+    "high_radiation_threshold_usvh": 0.5,
+    "high_radiation_duration_minutes": 2,
+    "enable_battery_alerts": true,
+    "low_battery_threshold_volts": 6.0,
+    "critical_battery_threshold_volts": 5.5
+  },
+  "homeassistant": {
+    "device_name": "GMC-300E Plus",
+    "device_model": "GMC-300E+",
+    "device_manufacturer": "GQ Electronics",
+    "device_identifier": "gmc300e_plus"
+  }
+}
